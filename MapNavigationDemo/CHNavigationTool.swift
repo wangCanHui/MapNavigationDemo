@@ -23,7 +23,7 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
     override init() {
         super.init()
     }
-    // 构造函数
+    // 构造函数（经纬度是百度地图的）
     init(currentLocation:CLLocation,toLocation:CLLocation,view:UIView,title:String) {
         self.currentLocation = currentLocation
         self.toLocation = toLocation
@@ -65,12 +65,13 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
 			if isSetupGaoDeMap {  // 使用高德地图导航
 				setupGaoDeMap(toCoordinate)
 			}else if isSetupBaiduMap{ // 使用百度地图导航
-				setupBaiduMap(toCoordinate)
+				setupBaiduMap(toLocation.coordinate)
 			}
 			
         }else if (buttonIndex == 3){ // 使用百度地图导航
-			setupBaiduMap(toCoordinate)
+			setupBaiduMap(toLocation.coordinate)
         }
+        
     }
 	
     // 调用高德地图
@@ -91,7 +92,7 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
 	private func setupBaiduMap(toCoordinate:CLLocationCoordinate2D){
         // 调用地图路径规划的字符串
 		var urlStr = "baidumap://map/direction?origin=" + "\(currentLocation.coordinate.latitude)" + ",\(currentLocation.coordinate.longitude)"
-		urlStr += "&destination=" + "\(toLocation.coordinate.latitude)" + ",\(toLocation.coordinate.longitude)" + "&mode=driving"
+		urlStr += "&destination=" + "\(toCoordinate.latitude)" + ",\(toCoordinate.longitude)" + "&mode=driving"
 		let url = NSURL(string: urlStr)!
 		
 		// 手机安装有百度地图app
@@ -99,7 +100,7 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
 			UIApplication.sharedApplication().openURL(url)
 		}
 	}
-	/// 百度地图经纬度转高德
+	/// 百度地图经纬度转高德、苹果
     func coordinateTransform(coordinate:CLLocationCoordinate2D) -> CLLocationCoordinate2D {
         // 国测局GCJ-02坐标体系（谷歌、高德、腾讯），百度坐标BD-09体系
         // 将 BD-09 坐标转换成 GCJ-02  坐标

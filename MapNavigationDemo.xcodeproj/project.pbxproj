@@ -296,6 +296,7 @@
 				6F220D7A1D8D180900B1BB01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

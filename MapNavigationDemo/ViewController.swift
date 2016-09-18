@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navTool = CHNavigationTool(currentLocation: CLLocation(latitude: 29.56646671,longitude: 106.47713852), toLocation: CLLocation(latitude: 29.697116999999999,longitude: 106.61015999999999), view: view, title: "请选择地图");
+       
     }
 
     @IBAction func showNavView() {

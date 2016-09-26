@@ -26,8 +26,8 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
     
     /**
      构造函数
-     currentLocation : 当前位置
-     toLocation : 目的地
+     currentLocation : 当前位置 （百度地图经纬度）
+     toLocation : 目的地 （百度地图经纬度）
      viewController : 显示到的控制器
      title : 弹出窗口的标题
      */
@@ -52,7 +52,9 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
         }else{
             alertVC = UIAlertController(title: title, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         }
+        
         let toCoordinate = coordinateTransform(toLocation.coordinate)
+        
         alertVC.addAction(UIAlertAction(title: "使用苹果自带地图导航", style: UIAlertActionStyle.default) { (_) in
             // 苹果自身地图导航
             let toItem = MKMapItem(placemark: MKPlacemark(coordinate: toCoordinate, addressDictionary: nil))
@@ -60,23 +62,19 @@ class CHNavigationTool: NSObject,UIActionSheetDelegate {
             let options = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:"\(true)"]
             MKMapItem.openMaps(with: items, launchOptions: options)
         })
+        
         if isSetupGaoDeMap {
             alertVC.addAction(UIAlertAction(title: "使用高德地图导航", style: UIAlertActionStyle.default) { (_) in
-                // 苹果自身地图导航
-                let toItem = MKMapItem(placemark: MKPlacemark(coordinate: toCoordinate, addressDictionary: nil))
-                let items = [toItem]
-                let options = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:"\(true)"]
-                MKMapItem.openMaps(with: items, launchOptions: options)
+                // 高德地图导航
+                self.setupGaoDeMap(toCoordinate)
             })
             
         }
+        
         if isSetupBaiduMap {
             alertVC.addAction(UIAlertAction(title: "使用百度地图导航", style: UIAlertActionStyle.default) { (_) in
-                // 苹果自身地图导航
-                let toItem = MKMapItem(placemark: MKPlacemark(coordinate: toCoordinate, addressDictionary: nil))
-                let items = [toItem]
-                let options = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:"\(true)"]
-                MKMapItem.openMaps(with: items, launchOptions: options)
+                // 百度地图导航
+                self.setupBaiduMap(self.toLocation.coordinate)
             })
         }
         alertVC.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel) { (_) in
